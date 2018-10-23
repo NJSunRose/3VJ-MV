@@ -30,9 +30,9 @@ namespace _3VJ_MV
         {
             InitializeComponent();
 
-            #region 设软件小工具版本号V1.5  宋新刚电脑是读取本地D:\模板忽删里的配置文件，其他电脑读取1.20服务器上面的
+            #region 设软件小工具版本号V1.6  宋新刚电脑是读取本地D:\模板忽删里的配置文件，其他电脑读取1.20服务器上面的
 
-            string currentversion = "V1.5";
+            string currentversion = "V1.6";
 
             IniFiles inifile_First = new IniFiles(Path.Combine(Environment.CurrentDirectory, "OrderNo.ini"));
             if (inifile_First.ExistINIFile())

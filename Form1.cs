@@ -4810,8 +4810,8 @@ namespace _3VJ_MV
             var sheet_three = Part.Where(it_three => it_three.Name.Contains("CT-")).ToList();
             var after_sheet_three = Part.Where(it_three => !it_three.Name.Contains("CT-")).ToList();
 
-            var sheet_two = after_sheet_three.Where(it_two => (Convert.ToDouble(it_two.Width) <= 60 || it_two.Thickness == "5" || it_two.Thickness == "8" || it_two.Thickness == "50" || it_two.Material.Contains("SJ") || it_two.Material.Contains("PET"))).ToList();
-            var after_sheet_two = after_sheet_three.Where(it_two => (Convert.ToDouble(it_two.Width) > 60 && it_two.Thickness != "5" && it_two.Thickness != "8" && it_two.Thickness != "50" && !it_two.Material.Contains("SJ") && !it_two.Material.Contains("PET"))).ToList();
+            var sheet_two = after_sheet_three.Where(it_two => (Convert.ToDouble(it_two.Width) <= 60 || it_two.Thickness == "5" || it_two.Thickness == "15" || it_two.Thickness == "8" || it_two.Thickness == "50" || it_two.Material.Contains("SJ") || it_two.Material.Contains("PET"))).ToList();
+            var after_sheet_two = after_sheet_three.Where(it_two => (Convert.ToDouble(it_two.Width) > 60 && it_two.Thickness != "5" && it_two.Thickness != "15" && it_two.Thickness != "8" && it_two.Thickness != "50" && !it_two.Material.Contains("SJ") && !it_two.Material.Contains("PET"))).ToList();
 
             //var sheet_one = Part.Where(it_one => it_one.Thickness == 18.ToString()).ToList();
 

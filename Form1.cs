@@ -30,9 +30,9 @@ namespace _3VJ_MV
         {
             InitializeComponent();
 
-            #region 设软件小工具版本号V1.6  宋新刚电脑是读取本地D:\模板忽删里的配置文件，其他电脑读取1.20服务器上面的
+            #region 设软件小工具版本号V1.7  宋新刚电脑是读取本地D:\模板忽删里的配置文件，其他电脑读取1.20服务器上面的
 
-            string currentversion = "V1.6";
+            string currentversion = "V1.7";
 
             IniFiles inifile_First = new IniFiles(Path.Combine(Environment.CurrentDirectory, "OrderNo.ini"));
             if (inifile_First.ExistINIFile())
@@ -3001,7 +3001,7 @@ namespace _3VJ_MV
                         {
                             string line2 = orderRouteSequencemodify[m - 1].ToString();
                             RouteSetMillSequenceEntity subvalue2 = new RouteSetMillSequenceEntity(line2);
-                            if (subvalue2.RouteDiameter == "10")  //上一段铣型也必须要是用10mm的刀具  宋新刚 20180326
+                            if (subvalue2.RouteDiameter == "10" && subvalue2.RouteEndTangentY != "1")  //上一段铣型也必须要是用10mm的刀具  宋新刚 20180326
                             {
                                 subvalue2.RouteX = x2.ToString();
                                 subvalue2.RouteY = y2.ToString();

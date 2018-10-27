@@ -30,9 +30,9 @@ namespace _3VJ_MV
         {
             InitializeComponent();
 
-            #region 设软件小工具版本号V1.7  宋新刚电脑是读取本地D:\模板忽删里的配置文件，其他电脑读取1.20服务器上面的
+            #region 设软件小工具版本号V1.8  宋新刚电脑是读取本地D:\模板忽删里的配置文件，其他电脑读取1.20服务器上面的
 
-            string currentversion = "V1.7";
+            string currentversion = "V1.8";
 
             IniFiles inifile_First = new IniFiles(Path.Combine(Environment.CurrentDirectory, "OrderNo.ini"));
             if (inifile_First.ExistINIFile())
@@ -404,10 +404,10 @@ namespace _3VJ_MV
 
                 if (panel.Edgelist.Count == 4)  // 20180525
                 {
-                    borderseq.Edgeband1 = panel.Edgelist[0].Thickness + "mm" + panel.Material + "封边条";               //应该要
-                    borderseq.Edgeband2 = panel.Edgelist[1].Thickness + "mm" + panel.Material + "封边条";                                   //应该要
-                    borderseq.Edgeband3 = panel.Edgelist[2].Thickness + "mm" + panel.Material + "封边条";                                     //应该要
-                    borderseq.Edgeband4 = panel.Edgelist[3].Thickness + "mm" + panel.Material + "封边条";                                       //应该要
+                    borderseq.Edgeband1 = panel.Edgelist[0].Thickness + "mm" + panel.Material.Replace("雏菊MM0261", "白山纹SW5001") + "封边条";               //应该要
+                    borderseq.Edgeband2 = panel.Edgelist[1].Thickness + "mm" + panel.Material.Replace("雏菊MM0261", "白山纹SW5001") + "封边条";                                   //应该要
+                    borderseq.Edgeband3 = panel.Edgelist[2].Thickness + "mm" + panel.Material.Replace("雏菊MM0261", "白山纹SW5001") + "封边条";                                     //应该要
+                    borderseq.Edgeband4 = panel.Edgelist[3].Thickness + "mm" + panel.Material.Replace("雏菊MM0261", "白山纹SW5001") + "封边条";                                       //应该要
 
                 }
                 else
@@ -4840,10 +4840,10 @@ namespace _3VJ_MV
                 range1[iRows1 + i, 18].Value = str.CabinetNo;
                 range1[iRows1 + i, 19].Value = str.HoleNum;
                 range1[iRows1 + i, 20].Value = str.Material;
-                range1[iRows1 + i, 21].Value = str.EL1;
-                range1[iRows1 + i, 22].Value = str.EL2;
-                range1[iRows1 + i, 23].Value = str.EW1;
-                range1[iRows1 + i, 24].Value = str.EW2;
+                range1[iRows1 + i, 21].Value = str.EL1.Replace("雏菊MM0261", "白山纹SW5001");
+                range1[iRows1 + i, 22].Value = str.EL2.Replace("雏菊MM0261", "白山纹SW5001");
+                range1[iRows1 + i, 23].Value = str.EW1.Replace("雏菊MM0261", "白山纹SW5001");
+                range1[iRows1 + i, 24].Value = str.EW2.Replace("雏菊MM0261", "白山纹SW5001");
             }
             int j = 0;
             foreach (var str in sheet_two)
@@ -4870,10 +4870,10 @@ namespace _3VJ_MV
                 range2[iRows2 + j, 18].Value = str.CabinetNo;
                 range2[iRows2 + j, 19].Value = str.HoleNum;
                 range2[iRows2 + j, 20].Value = str.Material;
-                range2[iRows2 + j, 21].Value = str.EL1;
-                range2[iRows2 + j, 22].Value = str.EL2;
-                range2[iRows2 + j, 23].Value = str.EW1;
-                range2[iRows2 + j, 24].Value = str.EW2;
+                range2[iRows2 + j, 21].Value = str.EL1.Replace("雏菊MM0261", "白山纹SW5001");
+                range2[iRows2 + j, 22].Value = str.EL2.Replace("雏菊MM0261", "白山纹SW5001");
+                range2[iRows2 + j, 23].Value = str.EW1.Replace("雏菊MM0261", "白山纹SW5001");
+                range2[iRows2 + j, 24].Value = str.EW2.Replace("雏菊MM0261", "白山纹SW5001");
             }
             int k = 0;
             foreach (var str in sheet_three)
@@ -4901,10 +4901,10 @@ namespace _3VJ_MV
                 range3[iRows3 + k, 19].Value = str.HoleNum;
                 range3[iRows3 + k, 20].Value = str.DrawerNo;
                 range3[iRows3 + k, 21].Value = str.Material;
-                range3[iRows3 + k, 22].Value = str.EL1;
-                range3[iRows3 + k, 23].Value = str.EL2;
-                range3[iRows3 + k, 24].Value = str.EW1;
-                range3[iRows3 + k, 25].Value = str.EW2;
+                range3[iRows3 + k, 22].Value = str.EL1.Replace("雏菊MM0261", "白山纹SW5001");
+                range3[iRows3 + k, 23].Value = str.EL2.Replace("雏菊MM0261", "白山纹SW5001");
+                range3[iRows3 + k, 24].Value = str.EW1.Replace("雏菊MM0261", "白山纹SW5001");
+                range3[iRows3 + k, 25].Value = str.EW2.Replace("雏菊MM0261", "白山纹SW5001");
             }
 
             range1 = bookproduct.Worksheets[0].Range[0,0,iRows1 + i, 24];

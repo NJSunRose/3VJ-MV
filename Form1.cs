@@ -30,9 +30,9 @@ namespace _3VJ_MV
         {
             InitializeComponent();
 
-            #region 设软件小工具版本号V1.9  宋新刚电脑是读取本地D:\模板忽删里的配置文件，其他电脑读取1.20服务器上面的
+            #region 设软件小工具版本号V2.0  宋新刚电脑是读取本地D:\模板忽删里的配置文件，其他电脑读取1.20服务器上面的
 
-            string currentversion = "V1.9";
+            string currentversion = "V2.0";
 
             IniFiles inifile_First = new IniFiles(Path.Combine(Environment.CurrentDirectory, "OrderNo.ini"));
             if (inifile_First.ExistINIFile())
@@ -544,7 +544,7 @@ namespace _3VJ_MV
                         if (vdrillseq.VDrillDiameter != "") //20180828 发现垂直孔的直径出现为空的情况，将此情况过滤
                         {
                             #region 垂直孔是25的，将25的孔先用20的孔打掉。然后再用10mm的刀铣成25的直径
-                            if (Math.Abs(Convert.ToDouble(vdrillseq.VDrillDiameter) - 25) < 0.01)
+                            if (Math.Abs(Convert.ToDouble(vdrillseq.VDrillDiameter) - 25) < 0.41)
                             {
                                 vdrillseq.VDrillDiameter = "20";
                                 vdrillseq.VDrillZ = (Convert.ToDouble(vdrillseq.VDrillZ) + 0.15).ToString();
@@ -4576,6 +4576,56 @@ namespace _3VJ_MV
                                 return;
                             }
                         }
+
+                        #region 20181030 50mm厚的板做长宽规格做了限制，只生成标准的几种。规格写在配置参数中
+                        if (Math.Abs(panelthickness - 50) < 0.1)
+                        {
+                            string checkinipath1 = Path.Combine(checkpath, "OrderNo.ini");
+                            IniFiles checkinifile1 = new IniFiles(checkinipath1);
+                            bool LengthWorkable = false;
+                            bool WidthWorkable = false;
+
+                            if (checkinifile1.ExistINIFile())
+                            {
+                                string[] LengthNum = checkinifile.IniReadValue("PanelLengthWidthfor50", "Length").Split(',');
+                                string[] WidthNum = checkinifile.IniReadValue("PanelLengthWidthfor50", "Width").Split(',');
+                                for (int num = 0; num < LengthNum.Length; num++)
+                                {
+                                    if (Math.Abs(Convert.ToDouble(panel.Length) - Convert.ToDouble(LengthNum[num])) < 0.1)
+                                    {
+                                        LengthWorkable = true;
+                                    }
+                                }
+
+                                if (!LengthWorkable)
+                                {
+                                    MessageBox.Show("三维家XML中的板件名称为: " + panel.Name + " ID号为: " + panel.ID + "\n板件长度【顺着纹理的方向】: " + panel.Length + "\n板件宽度【垂直纹理的方向】: " + panel.Width + "\n厚度为" + panel.Thickness + "mm的板在板件长度【顺着纹理的方向】不在可加工的 " + checkinifile.IniReadValue("PanelLengthWidthfor50", "Length") + " 几个标准的尺寸内!\n请先修改模型!\n\n板件正反面加工码的生成已终止!", "警告",
+                                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                    return;
+                                }
+
+                                for (int num = 0; num < WidthNum.Length; num++)
+                                {
+                                    if (Math.Abs(Convert.ToDouble(panel.Width) - Convert.ToDouble(WidthNum[num])) < 0.1)
+                                    {
+                                        WidthWorkable = true;
+                                    }
+                                }
+
+                                if (!WidthWorkable)
+                                {
+                                    MessageBox.Show("三维家XML中的板件名称为: " + panel.Name + " ID号为: " + panel.ID + "\n板件长度【顺着纹理的方向】: " + panel.Length + "\n板件宽度【垂直纹理的方向】: " + panel.Width + "\n厚度为" + panel.Thickness + "mm的板在板件宽度【垂直纹理的方向】不在可加工的 " + checkinifile.IniReadValue("PanelLengthWidthfor50", "Width") + " 几个标准的尺寸内!\n请先修改模型!\n\n板件正反面加工码的生成已终止!", "警告",
+                                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                    return;
+                                }
+                            }
+                            else
+                            {
+                                MessageBox.Show("记录订单号的配置文件不存在，请手动在 " + inipath + " 目录下创建！");
+                                return;
+                            }
+                        }
+                        #endregion
                     }
                     #endregion
 

@@ -30,9 +30,9 @@ namespace _3VJ_MV
         {
             InitializeComponent();
 
-            #region 设软件小工具版本号V1.8  宋新刚电脑是读取本地D:\模板忽删里的配置文件，其他电脑读取1.20服务器上面的
+            #region 设软件小工具版本号V1.9  宋新刚电脑是读取本地D:\模板忽删里的配置文件，其他电脑读取1.20服务器上面的
 
-            string currentversion = "V1.8";
+            string currentversion = "V1.9";
 
             IniFiles inifile_First = new IniFiles(Path.Combine(Environment.CurrentDirectory, "OrderNo.ini"));
             if (inifile_First.ExistINIFile())
@@ -543,16 +543,70 @@ namespace _3VJ_MV
 
                         if (vdrillseq.VDrillDiameter != "") //20180828 发现垂直孔的直径出现为空的情况，将此情况过滤
                         {
-                            if (panel.Machininglist[i].Face == "5")
+                            #region 垂直孔是25的，将25的孔先用20的孔打掉。然后再用10mm的刀铣成25的直径
+                            if (Math.Abs(Convert.ToDouble(vdrillseq.VDrillDiameter) - 25) < 0.01)
                             {
-                                borderseq.FoundVdrillFace6 = "TRUE";
-                                face6list.Add(vdrillseq.OutPutCsvString());
+                                vdrillseq.VDrillDiameter = "20";
+                                vdrillseq.VDrillZ = (Convert.ToDouble(vdrillseq.VDrillZ) + 0.15).ToString();
+                                RouteSetMillSequenceEntity route = new RouteSetMillSequenceEntity();
+
+                                route = RouteProcess(panel.Machininglist[i], 1);
+
+                                if (panel.Machininglist[i].Face == "5")
+                                {
+                                    borderseq.FoundVdrillFace6 = "TRUE";
+                                    borderseq.FoundRoutingFace6 = "TRUE";
+                                    face6list.Add(vdrillseq.OutPutCsvString());
+                                    face6list.Add(route.OutPutCsvString());
+                                }
+                                else if (panel.Machininglist[i].Face == "6")
+                                {
+                                    borderseq.FoundVdrill = "TRUE";
+                                    borderseq.FoundRouting = "TRUE";
+                                    face5list.Add(vdrillseq.OutPutCsvString());
+                                    face5list.Add(route.OutPutCsvString());
+                                }
+
+                                route = RouteProcess(panel.Machininglist[i], 2);
+
+                                if (panel.Machininglist[i].Face == "5")
+                                {
+                                    borderseq.FoundRoutingFace6 = "TRUE";
+                                    face6list.Add(route.OutPutCsvString());
+                                }
+                                else if (panel.Machininglist[i].Face == "6")
+                                {
+                                    borderseq.FoundRouting = "TRUE";
+                                    face5list.Add(route.OutPutCsvString());
+                                }
+
+                                route = RouteProcess(panel.Machininglist[i], 3);
+
+                                if (panel.Machininglist[i].Face == "5")
+                                {
+                                    borderseq.FoundRoutingFace6 = "TRUE";
+                                    face6list.Add(route.OutPutCsvString());
+                                }
+                                else if (panel.Machininglist[i].Face == "6")
+                                {
+                                    borderseq.FoundRouting = "TRUE";
+                                    face5list.Add(route.OutPutCsvString());
+                                }
                             }
-                            else if (panel.Machininglist[i].Face == "6")
+                            else
                             {
-                                borderseq.FoundVdrill = "TRUE";
-                                face5list.Add(vdrillseq.OutPutCsvString());
+                                if (panel.Machininglist[i].Face == "5")
+                                {
+                                    borderseq.FoundVdrillFace6 = "TRUE";
+                                    face6list.Add(vdrillseq.OutPutCsvString());
+                                }
+                                else if (panel.Machininglist[i].Face == "6")
+                                {
+                                    borderseq.FoundVdrill = "TRUE";
+                                    face5list.Add(vdrillseq.OutPutCsvString());
+                                }
                             }
+                            #endregion
 
                             if (Math.Abs(double.Parse(vdrillseq.VDrillDiameter) - 20) < 0.1 && panel.Name.Contains("二合一层板"))  //20180611  宋新刚 对于二合一层板，需要将垂直孔的部份，用水平孔将封边条给打掉
                             {
@@ -2810,6 +2864,77 @@ namespace _3VJ_MV
             routesetmillseq.RouteStartTangentY = "";
             routesetmillseq.RouteEndTangentX = "";
             routesetmillseq.RouteEndTangentY = "";  //记录是否需要减封边值
+
+            return (routesetmillseq);
+        }
+
+        public RouteSetMillSequenceEntity RouteProcess(Machining machining, int times)  //20181030
+        {
+            RouteSetMillSequenceEntity routesetmillseq = new RouteSetMillSequenceEntity();
+
+            string RouteSetMillX = (Convert.ToDouble(machining.X) - Convert.ToDouble(machining.Diameter) / 2).ToString();
+
+            if (times == 1)
+            {
+                routesetmillseq.RouteSetMillSequence = "RouteSetMillSequence";
+                routesetmillseq.RouteX = RouteSetMillX;
+            }
+            else if (times == 2)
+            {
+                routesetmillseq.RouteSetMillSequence = "RouteSequence";
+                routesetmillseq.RouteX = (Convert.ToDouble(machining.X) + Convert.ToDouble(machining.Diameter) / 2).ToString();
+            }
+            else if (times == 3)
+            {
+                routesetmillseq.RouteSetMillSequence = "RouteSequence";
+                routesetmillseq.RouteX = RouteSetMillX;
+            }
+
+            routesetmillseq.RouteSetMillX = RouteSetMillX;
+            routesetmillseq.RouteSetMillY = machining.Y;
+            routesetmillseq.RouteSetMillZ = (Convert.ToDouble(machining.Depth) + 0.15).ToString();
+            // routesetmillseq.RouteStartOffsetX = (Convert.ToDouble(RouteSetMillX) + 5).ToString();
+            routesetmillseq.RouteStartOffsetX = RouteSetMillX;
+            routesetmillseq.RouteStartOffsetY = machining.Y;
+            routesetmillseq.RouteDiameter = "10";
+            routesetmillseq.RouteToolName = "130";
+            routesetmillseq.RoutePreviousToolName = "";
+            routesetmillseq.RouteNextToolName = "";
+            routesetmillseq.RouteFeedSpeed = "";
+            routesetmillseq.RouteEntrySpeed = "";
+            routesetmillseq.RouteBitType = "";
+            routesetmillseq.RouteRotation = "";
+            routesetmillseq.RouteToolComp = "1";
+
+            routesetmillseq.RouteY = machining.Y;
+            routesetmillseq.RouteZ = (Convert.ToDouble(machining.Depth) + 0.15).ToString();
+            routesetmillseq.RouteEndOffsetX = "";
+            routesetmillseq.RouteEndOffsetY = "";
+            routesetmillseq.RouteBulge = "-1";
+            routesetmillseq.RouteRadius = (Convert.ToDouble(machining.Diameter) / 2).ToString();
+            routesetmillseq.RouteCenterX = machining.X;
+            routesetmillseq.RouteCenterY = machining.Y;
+            routesetmillseq.RouteNextX = "";
+            routesetmillseq.RouteNextY = "";
+            routesetmillseq.RoutePreviousX = "";
+            routesetmillseq.RoutePreviousY = "";
+            routesetmillseq.RoutePreviousZ = "";
+            routesetmillseq.RouteBulgeNext = "";
+            routesetmillseq.RouteSetMillCounter = "";  //AD里是要的 为了标记连续轮廓
+            routesetmillseq.RouteVectorCounter = "";
+            routesetmillseq.RouteVectorCount = "";
+            routesetmillseq.RouteAngle = "";
+            routesetmillseq.RoutePreviousFeedSpeed = "";
+            routesetmillseq.ArcPeakX = "";
+            routesetmillseq.ArcPeakY = "";
+            routesetmillseq.ArcPeakBulge = "";
+            routesetmillseq.RoutePreviousBulge = "";
+            routesetmillseq.RouteRotation = "";
+            routesetmillseq.RouteSpindleSpeed = "";
+            routesetmillseq.RouteStartTangentX = "";
+            routesetmillseq.RouteStartTangentY = "";
+            routesetmillseq.RouteEndTangentX = "";
+            routesetmillseq.RouteEndTangentY = "1";  //记录是否需要减封边值
 
             return (routesetmillseq);
         }

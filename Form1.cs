@@ -30,9 +30,9 @@ namespace _3VJ_MV
         {
             InitializeComponent();
 
-            #region 设软件小工具版本号V2.0  宋新刚电脑是读取本地D:\模板忽删里的配置文件，其他电脑读取1.20服务器上面的
+            #region 设软件小工具版本号V2.1  宋新刚电脑是读取本地D:\模板忽删里的配置文件，其他电脑读取1.20服务器上面的
 
-            string currentversion = "V2.0";
+            string currentversion = "V2.1";
 
             IniFiles inifile_First = new IniFiles(Path.Combine(Environment.CurrentDirectory, "OrderNo.ini"));
             if (inifile_First.ExistINIFile())
@@ -4663,7 +4663,8 @@ namespace _3VJ_MV
                     sampanel.HoleNum = "0";
                     sampanel.Material = nest.Material;
                     sampanel.DrawerNo = panel.drawer.ToString();
-                        
+                    sampanel.PartNumber = panel.PartNumber; //20181102
+
                     Part.Add(sampanel);
                 }
             }
@@ -5019,6 +5020,7 @@ namespace _3VJ_MV
                 range1[iRows1 + i, 22].Value = str.EL2;
                 range1[iRows1 + i, 23].Value = str.EW1;
                 range1[iRows1 + i, 24].Value = str.EW2;
+                range1[iRows1 + i, 25].Value = str.PartNumber; //20181102
             }
             int j = 0;
             foreach (var str in sheet_two)
@@ -5049,6 +5051,7 @@ namespace _3VJ_MV
                 range2[iRows2 + j, 22].Value = str.EL2;
                 range2[iRows2 + j, 23].Value = str.EW1;
                 range2[iRows2 + j, 24].Value = str.EW2;
+                range2[iRows2 + j, 25].Value = str.PartNumber; //20181102
             }
             int k = 0;
             foreach (var str in sheet_three)
@@ -5080,13 +5083,14 @@ namespace _3VJ_MV
                 range3[iRows3 + k, 23].Value = str.EL2;
                 range3[iRows3 + k, 24].Value = str.EW1;
                 range3[iRows3 + k, 25].Value = str.EW2;
+                range3[iRows3 + k, 26].Value = str.PartNumber;//20181102
             }
 
-            range1 = bookproduct.Worksheets[0].Range[0,0,iRows1 + i, 24];
+            range1 = bookproduct.Worksheets[0].Range[0,0,iRows1 + i, 25];//20181102
             range1.Borders.Color = Color.Black;
-            range2 = bookproduct.Worksheets[1].Range[0, 0, iRows2 + j, 24];
+            range2 = bookproduct.Worksheets[1].Range[0, 0, iRows2 + j, 25];//20181102
             range2.Borders.Color = Color.Black;
-            range3 = bookproduct.Worksheets[2].Range[0, 0, iRows3 + k, 25];
+            range3 = bookproduct.Worksheets[2].Range[0, 0, iRows3 + k, 26];//20181102
             range3.Borders.Color = Color.Black;
 
             saveFileDialog1.Filter = "SAMEX板件清单|*.xls";

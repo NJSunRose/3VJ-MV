@@ -34,6 +34,7 @@ namespace _3VJ_MV
         public string EL1 { get; set; }
         public string EL2 { get; set; }
         public string DrawerNo { get; set; }
+        public string PartNumber { get; set; }//20181102更新。为了系统的板报价
 
         public int GetEdgeNum(string edge)
         {

@@ -24,15 +24,14 @@ namespace _3VJ_MV
     
     public partial class Form1 : Form
     {
-        Dictionary<string, int> MVData = new Dictionary<string, int>();
         List<Class_PartType> parttype = new List<Class_PartType>();
         public Form1()
         {
             InitializeComponent();
 
-            #region 设软件小工具版本号V2.1  宋新刚电脑是读取本地D:\模板忽删里的配置文件，其他电脑读取1.20服务器上面的
+            #region 设软件小工具版本号V2.2  宋新刚电脑是读取本地D:\模板忽删里的配置文件，其他电脑读取1.20服务器上面的
 
-            string currentversion = "V2.1";
+            string currentversion = "V2.2";
 
             IniFiles inifile_First = new IniFiles(Path.Combine(Environment.CurrentDirectory, "OrderNo.ini"));
             if (inifile_First.ExistINIFile())
@@ -117,30 +116,6 @@ namespace _3VJ_MV
             this.listView1.GridLines = true;
 
             this.listView2.GridLines = true;
-
-            #region 每次开启软件的时候，将颜色码读进数组中 20180718
-            string mvdatapath = Path.Combine(Environment.CurrentDirectory, "切割板件文件.ctpx");
-            IWorkbook bookproduct = null;
-
-            bookproduct = Factory.GetWorkbook(mvdatapath);
-            IRange range = bookproduct.Worksheets[1].Cells;
-            int iRows = range.ColumnCount;
-
-            for (int i = 0; i < 2000; i++)
-            {
-                if (range[i, 0].Value == null)
-                    break;
-
-                string mvsheetdata = range[i, 0].Value.ToString().Replace("E0级刨花板","");
-                string [] color = mvsheetdata.Split(new string[] { "mm"},StringSplitOptions.RemoveEmptyEntries);
-
-                if (!MVData.ContainsKey(color[1]))
-                    MVData.Add(color[1], 1);
-                else
-                    MVData[color[1]] += 1;
-
-            }
-            #endregion
 
             #region 每次开启软件的时候，将2号车间生产的板件类型导进内存中
             string path_parttype = Path.Combine(Environment.CurrentDirectory, "PartType.csv");
@@ -3403,17 +3378,34 @@ namespace _3VJ_MV
 
                 string name = panel.Material;
 
-                foreach (var str in MVData)  //查找之前保存的数据，然后进行颜色的替换 20180718
+                #region 对颜色号的提取从配置参数里读 20181103
+                string checkpathmvdata = @"\\192.168.1.20\数据源\模板忽删";
+                if (Environment.MachineName.Equals("WIN-M2KRCJPECH2") || Environment.MachineName.Equals("SXG035") || Environment.MachineName.Equals("SXG035.000"))
                 {
-                    if (nest.Material.Replace("皮纹","PW") != str.Key && !str.Key.Contains("SJ")&& str.Key.Contains(nest.Material.Replace("皮纹", "PW")))
-                    {
-                        nest.Material = str.Key;
-                        name = str.Key;
-                    }
+                    checkpathmvdata = @"D:\模板忽删";
                 }
+                string checkinimvdata = Path.Combine(checkpathmvdata, "OrderNo.ini");
+                IniFiles checkinifilemvdata = new IniFiles(checkinimvdata);
+                string partname = nest.Material;
+
+                if (panel.BasicMaterial.Equals("水晶板"))
+                {
+                    partname = nest.Material + "SJ";
+                }
+
+                if (checkinifilemvdata.ExistINIFile())
+                {
+                    nest.Material = checkinifilemvdata.IniReadValue("MVDATA", partname);
+                    name = nest.Material;
+                }
+                else
+                {
+                    MessageBox.Show("记录订单号的配置文件不存在，请手动在 " + inipath + " 目录下创建！");
+                    return;
+                }
+                #endregion
+
                 nest.Material = panel.Thickness + "mm" + nest.Material.Replace("月石白PW", "月石白皮纹") + "E0级刨花板";
-
-
                 nest.EbW1 = "";
                 nest.EbW2 = "";
                 nest.EbL1 = "";
@@ -4221,18 +4213,33 @@ namespace _3VJ_MV
                 nest.Material = panel.Material;
                 string name = panel.Material;
 
-                foreach (var str in MVData)  //查找之前保存的数据，然后进行颜色的替换 20180718
+                #region 对颜色号的提取从配置参数里读 20181103
+                string checkpathmvdata = @"\\192.168.1.20\数据源\模板忽删";
+                if (Environment.MachineName.Equals("WIN-M2KRCJPECH2") || Environment.MachineName.Equals("SXG035") || Environment.MachineName.Equals("SXG035.000"))
                 {
-                    if (nest.Material != str.Key  && str.Key.Contains(nest.Material)) //20181011 增加上水晶材质
-                        {
-                        if (!panel.BasicMaterial.Equals("水晶板") && str.Key.Contains("SJ")) 
-                        {
-                            continue;
-                        }
-                        nest.Material = str.Key;
-                        name = str.Key;
-                    }
+                    checkpathmvdata = @"D:\模板忽删";
                 }
+                string checkinimvdata = Path.Combine(checkpathmvdata, "OrderNo.ini");
+                IniFiles checkinifilemvdata = new IniFiles(checkinimvdata);
+                string partname = nest.Material;
+
+                if (panel.BasicMaterial.Equals("水晶板"))
+                {
+                    partname = nest.Material + "SJ";
+                }
+
+                if (checkinifilemvdata.ExistINIFile())
+                {
+                    nest.Material = checkinifilemvdata.IniReadValue("MVDATA", partname);
+                    name = nest.Material;
+                }
+                else
+                {
+                    MessageBox.Show("记录订单号的配置文件不存在，请手动在 " + inipath + " 目录下创建！");
+                    return;
+                }
+                #endregion
+
                 Currentpanelcolor = nest.Material;
 
                 nest.Material = panel.Thickness + "mm" + nest.Material + "E0级刨花板";

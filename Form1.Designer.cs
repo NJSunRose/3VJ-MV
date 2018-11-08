@@ -792,7 +792,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "3VJ-SAMEX-MV【V2.2】";
+            this.Text = "3VJ-SAMEX-MV【V2.3】";
             this.柜体板.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);

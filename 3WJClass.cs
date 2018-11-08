@@ -25,6 +25,12 @@ namespace _3VJ_MV
 
             foreach (XmlNode xnl in root.ChildNodes)
             {
+                if (xnl.Name == "GroupCabinet")//临时增加20181108
+                {
+                    MessageBox.Show("出错了!出现了之前没有解析过的XML节点!\n\n转换终止!", "出错", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
                 if (xnl.Name == "GroupCabinet" || xnl.Name == "Cabinet") //20180912 删除之前很多的判断
                 {
                     #region 20180912 组合柜里的板件或组件提取 还有就是单独的柜子的提取

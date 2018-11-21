@@ -29,9 +29,9 @@ namespace _3VJ_MV
         {
             InitializeComponent();
 
-            #region 设软件小工具版本号V2.3  宋新刚电脑是读取本地D:\模板忽删里的配置文件，其他电脑读取1.20服务器上面的
+            #region 设软件小工具版本号V2.4  宋新刚电脑是读取本地D:\模板忽删里的配置文件，其他电脑读取1.20服务器上面的
 
-            string currentversion = "V2.3";
+            string currentversion = "V2.4";
 
             IniFiles inifile_First = new IniFiles(Path.Combine(Environment.CurrentDirectory, "OrderNo.ini"));
             if (inifile_First.ExistINIFile())
@@ -5561,13 +5561,13 @@ namespace _3VJ_MV
 
             range1 = bookproduct.Worksheets[0].Range[0, 0, iRows1 + i, 24];
             range1.Borders.Color = Color.Black;
-            bookproduct.Worksheets[0].PageSetup.PrintArea = "$A$1:$T$"+(iRows1+i).ToString();//将打印区域设置为整个工作区域
+            bookproduct.Worksheets[0].PageSetup.PrintArea = "$A$1:$T$"+(iRows1 + i + 1).ToString();//将打印区域设置为整个工作区域
             range2 = bookproduct.Worksheets[1].Range[0, 0, iRows2 + j, 24];
             range2.Borders.Color = Color.Black;
-            bookproduct.Worksheets[1].PageSetup.PrintArea = "$A$1:$T$" + (iRows2 + j).ToString();
+            bookproduct.Worksheets[1].PageSetup.PrintArea = "$A$1:$T$" + (iRows2 + j + 1).ToString();
             range3 = bookproduct.Worksheets[2].Range[0, 0, iRows3 + k, 25];
             range3.Borders.Color = Color.Black;
-            bookproduct.Worksheets[2].PageSetup.PrintArea = "$A$1:$U$" + (iRows3 + k).ToString();
+            bookproduct.Worksheets[2].PageSetup.PrintArea = "$A$1:$U$" + (iRows3 + k + 1).ToString();
 
             saveFileDialog1.Filter = "SAMEX板件清单|*";
             DateTime dt = DateTime.Now;
@@ -5682,19 +5682,27 @@ namespace _3VJ_MV
 
                 DirectoryInfo direinfo_third = new DirectoryInfo(HaveOutCsvPath);
 
-                foreach(FileSystemInfo fileinfo in direinfo_third.GetFiles())
+                try
                 {
-                    if (fileinfo is DirectoryInfo)
+                    foreach (FileSystemInfo fileinfo in direinfo_third.GetFiles())
                     {
-                        MessageBox.Show(HaveOutCsvPath + " \n这文件夹下不应该再有文件夹啊!", "警告", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        return;
+                        if (fileinfo is DirectoryInfo)
+                        {
+                            MessageBox.Show(HaveOutCsvPath + " \n这文件夹下不应该再有文件夹啊!", "警告", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            return;
+                        }
+                        else
+                        {
+                            FileInfo file = new FileInfo(fileinfo.FullName);
+                            file.Attributes = FileAttributes.Normal;
+                            file.CopyTo(Path.Combine(PTP160BachNum, file.Name));
+                        }
                     }
-                    else
-                    {
-                        FileInfo file = new FileInfo(fileinfo.FullName);
-                        file.Attributes = FileAttributes.Normal;
-                        file.CopyTo(Path.Combine(PTP160BachNum,file.Name));
-                    }
+                }
+                catch
+                {
+                    MessageBox.Show(HaveOutCsvPath + "\n\n服务器上面没有此目录,请与拆单人员联系.请他们重新处理此表单!", "出错", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
                 }
             }
             #endregion

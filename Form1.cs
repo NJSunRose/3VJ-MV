@@ -29,9 +29,9 @@ namespace _3VJ_MV
         {
             InitializeComponent();
 
-            #region 设软件小工具版本号V2.4  宋新刚电脑是读取本地D:\模板忽删里的配置文件，其他电脑读取1.20服务器上面的
+            #region 设软件小工具版本号V2.5  宋新刚电脑是读取本地D:\模板忽删里的配置文件，其他电脑读取1.20服务器上面的
 
-            string currentversion = "V2.4";
+            string currentversion = "V2.5";
 
             IniFiles inifile_First = new IniFiles(Path.Combine(Environment.CurrentDirectory, "OrderNo.ini"));
             if (inifile_First.ExistINIFile())
@@ -4231,7 +4231,17 @@ namespace _3VJ_MV
                 if (checkinifilemvdata.ExistINIFile())
                 {
                     nest.Material = checkinifilemvdata.IniReadValue("MVDATA", partname);
-                    name = nest.Material;
+
+                    if (string.IsNullOrEmpty(nest.Material))
+                    {
+                        MessageBox.Show("此板号的颜色为: " + partname + "\n\n此颜色不在可加工的范围内!\n\n程序终止,请修改后重新执行!", "警告", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    else
+                    {
+                        name = nest.Material;
+                    }
+
                 }
                 else
                 {

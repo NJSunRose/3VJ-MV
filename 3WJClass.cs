@@ -136,7 +136,7 @@ namespace _3VJ_MV
                                             return;
                                         }
 
-                                        if (panel.SMAEX.Equals("1"))
+                                        if (panel.SMAEX.Equals("1") && panel.cabinet.CabinetNo != string.Empty) //20181228
                                             panel.Name = panel.cabinet.CabinetNo + "-" + panel.Name;
 
                                         cabinet.Panellist.Add(panel);
@@ -272,7 +272,7 @@ namespace _3VJ_MV
                                                     return;
                                                 }
 
-                                                if (panel.SMAEX.Equals("1"))
+                                                if (panel.SMAEX.Equals("1") && panel.cabinet.CabinetNo != string.Empty) //20181228
                                                     panel.Name = panel.cabinet.CabinetNo + "-" + panel.Name;
 
                                                 Group_down_cabinet.Panellist.Add(panel);
@@ -494,7 +494,7 @@ namespace _3VJ_MV
                                             return;
                                         }
 
-                                        if (childpanel.SMAEX.Equals("1"))
+                                        if (childpanel.SMAEX.Equals("1") && childpanel.cabinet.CabinetNo != string.Empty) //20181228
                                             childpanel.Name = childpanel.cabinet.CabinetNo + "-" + childpanel.Name;
 
                                         cabinet.Panellist.Add(childpanel);
@@ -515,7 +515,12 @@ namespace _3VJ_MV
                 Length = xnpanel.Attributes["Length"] == null ? "" : xnpanel.Attributes["Length"].Value;
                 Width = xnpanel.Attributes["Width"] == null ? "" : xnpanel.Attributes["Width"].Value;
                 ID = xnpanel.Attributes["ID"] == null ? "" : xnpanel.Attributes["ID"].Value;
+
+                if (parentcabinet.CabinetNo != string.Empty) //20181228
                 Name = parentcabinet.CabinetNo + "-" + xnpanel.Attributes["Name"] == null ? "" : xnpanel.Attributes["Name"].Value;
+                else
+                Name = xnpanel.Attributes["Name"] == null ? "" : xnpanel.Attributes["Name"].Value;
+
                 Material = xnpanel.Attributes["Material"] == null ? "" : xnpanel.Attributes["Material"].Value;
                 MaterialId = xnpanel.Attributes["MaterialId"] == null ? "" : xnpanel.Attributes["MaterialId"].Value;
                 BaseMaterialCategoryId = xnpanel.Attributes["BaseMaterialCategoryId"] == null ? "" : xnpanel.Attributes["BaseMaterialCategoryId"].Value;
@@ -673,7 +678,7 @@ namespace _3VJ_MV
                                             return;
                                         }
 
-                                        if (childpanel.SMAEX.Equals("1"))
+                                        if (childpanel.SMAEX.Equals("1") && childpanel.cabinet.CabinetNo != string.Empty) //20181228
                                             childpanel.Name = childpanel.cabinet.CabinetNo + "-" + childpanel.Name;
 
 
@@ -855,7 +860,7 @@ namespace _3VJ_MV
                                             return;
                                         }
 
-                                        if (childpanel.SMAEX.Equals("1"))
+                                        if (childpanel.SMAEX.Equals("1") && childpanel.cabinet.CabinetNo != string.Empty) //20181228
                                             childpanel.Name = childpanel.cabinet.CabinetNo + "-" + childpanel.Name;
 
                                         cabinet.Panellist.Add(childpanel);
@@ -1037,7 +1042,7 @@ namespace _3VJ_MV
                                             return;
                                         }
 
-                                        if (childpanel.SMAEX.Equals("1"))
+                                        if (childpanel.SMAEX.Equals("1") && childpanel.cabinet.CabinetNo != string.Empty) //20181228
                                             childpanel.Name = childpanel.cabinet.CabinetNo + "-" + childpanel.Name;
 
                                         cabinet.Panellist.Add(childpanel);

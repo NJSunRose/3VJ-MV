@@ -29,9 +29,9 @@ namespace _3VJ_MV
         {
             InitializeComponent();
 
-            #region 设软件小工具版本号V2.9  宋新刚电脑是读取本地D:\模板忽删里的配置文件，其他电脑读取1.20服务器上面的
+            #region 设软件小工具版本号V3.0  宋新刚电脑是读取本地D:\模板忽删里的配置文件，其他电脑读取1.20服务器上面的
 
-            string currentversion = "V2.9";
+            string currentversion = "V3.0";
 
             IniFiles inifile_First = new IniFiles(Path.Combine(Environment.CurrentDirectory, "OrderNo.ini"));
             if (inifile_First.ExistINIFile())
@@ -1859,7 +1859,12 @@ namespace _3VJ_MV
                         }
                         else if (panel.Machininglist[i].ToolName == "开槽刀")   // 厨柜因为背板只有5mm，增加了6.35 20180419
                         {
-                                if (panel.cabinet.OrderNo.Contains("CG")) //20190102对厨柜的槽宽做了限制。如果不满足要求就报错
+                                if (Math.Abs(double.Parse(panel.Machininglist[i].Width) - 9) < 0.01) //20190102对厨柜的槽宽做了限制。如果不满足要求就报错.这里的逻辑重新写了一下
+                                {
+                                    routesetmillseq.RouteDiameter = "8.5";
+                                    routesetmillseq.RouteToolName = "129";
+                                }
+                                else
                                 {
                                     if (Math.Abs(double.Parse(panel.Machininglist[i].Width) - 6) < 0.01)
                                     {
@@ -1869,15 +1874,16 @@ namespace _3VJ_MV
                                     else
                                     {
                                         HaveLarger = true;
+                                        
+                                        if (panel.cabinet.OrderNo.Contains("CG"))
                                         MessageBox.Show("当前橱柜订单号为: " + panel.cabinet.OrderNo + "\n\n有问题的板号为: " + panel.ID + "\n\n槽宽为: " + panel.Machininglist[i].Width
-                                            + "\n\n请注意,橱柜的槽宽必须为 6mm，正反面加工码转换终止!","错误",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                                            + "\n\n请注意,橱柜的槽宽必须为 6mm，正反面加工码转换终止!", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                        else
+                                            MessageBox.Show("当前订单号为: " + panel.cabinet.OrderNo + "\n\n有问题的板号为: " + panel.ID + "\n\n槽宽为: " + panel.Machininglist[i].Width
+                                                + "\n\n请注意,此槽宽并非班尔奇所规定的6mm槽或9mm槽的范围之内，正反面加工码转换终止!", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
                                         return;
                                     }
-                                }
-                                else
-                                {
-                                    routesetmillseq.RouteDiameter = "8.5";
-                                    routesetmillseq.RouteToolName = "129";
                                 }
 
 
@@ -2024,7 +2030,12 @@ namespace _3VJ_MV
                             else if (panel.Machininglist[i].ToolName == "开槽刀")  // 厨柜因为背板只有5mm，增加了6.35 20180419
                                 {
 
-                                    if (panel.cabinet.OrderNo.Contains("CG")) //20190102对厨柜的槽宽做了限制。如果不满足要求就报错
+                                    if (Math.Abs(double.Parse(panel.Machininglist[i].Width) - 9) < 0.01) //20190102对厨柜的槽宽做了限制。如果不满足要求就报错.这里的逻辑重新写了一下
+                                    {
+                                        routesetmillseq.RouteDiameter = "8.5";
+                                        routesetmillseq.RouteToolName = "129";
+                                    }
+                                    else
                                     {
                                         if (Math.Abs(double.Parse(panel.Machininglist[i].Width) - 6) < 0.01)
                                         {
@@ -2034,15 +2045,16 @@ namespace _3VJ_MV
                                         else
                                         {
                                             HaveLarger = true;
-                                            MessageBox.Show("当前橱柜订单号为: " + panel.cabinet.OrderNo + "\n\n有问题的板号为: " + panel.ID + "\n\n槽宽为: " + panel.Machininglist[i].Width
-                                                + "\n\n请注意,橱柜的槽宽必须为 6mm，正反面加工码转换终止!", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                                            if (panel.cabinet.OrderNo.Contains("CG"))
+                                                MessageBox.Show("当前橱柜订单号为: " + panel.cabinet.OrderNo + "\n\n有问题的板号为: " + panel.ID + "\n\n槽宽为: " + panel.Machininglist[i].Width
+                                                    + "\n\n请注意,橱柜的槽宽必须为 6mm，正反面加工码转换终止!", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                            else
+                                                MessageBox.Show("当前订单号为: " + panel.cabinet.OrderNo + "\n\n有问题的板号为: " + panel.ID + "\n\n槽宽为: " + panel.Machininglist[i].Width
+                                                    + "\n\n请注意,此槽宽并非班尔奇所规定的6mm槽或9mm槽的范围之内，正反面加工码转换终止!", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
                                             return;
                                         }
-                                    }
-                                    else
-                                    {
-                                        routesetmillseq.RouteDiameter = "8.5";
-                                        routesetmillseq.RouteToolName = "129";
                                     }
 
                                     #region 增加如果开通槽的时候 在通过式PTP上有锯片功能  20180330

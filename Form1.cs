@@ -29,9 +29,9 @@ namespace _3VJ_MV
         {
             InitializeComponent();
 
-            #region 设软件小工具版本号V3.0  宋新刚电脑是读取本地D:\模板忽删里的配置文件，其他电脑读取1.20服务器上面的
+            #region 设软件小工具版本号V3.1  宋新刚电脑是读取本地D:\模板忽删里的配置文件，其他电脑读取1.20服务器上面的
 
-            string currentversion = "V3.0";
+            string currentversion = "V3.1";
 
             IniFiles inifile_First = new IniFiles(Path.Combine(Environment.CurrentDirectory, "OrderNo.ini"));
             if (inifile_First.ExistINIFile())
@@ -1876,10 +1876,10 @@ namespace _3VJ_MV
                                         HaveLarger = true;
                                         
                                         if (panel.cabinet.OrderNo.Contains("CG"))
-                                        MessageBox.Show("当前橱柜订单号为: " + panel.cabinet.OrderNo + "\n\n有问题的板号为: " + panel.ID + "\n\n槽宽为: " + panel.Machininglist[i].Width
+                                        MessageBox.Show("当前橱柜订单号为: " + panel.cabinet.OrderNo + "\n\n有问题的板号为: " + panel.ID + "\n\n有问题的板件名称为: " + panel.Name + "\n\n有问题的板件长宽为: " + panel.Length + " X " + panel.Width + "\n\n槽宽为: " + panel.Machininglist[i].Width
                                             + "\n\n请注意,橱柜的槽宽必须为 6mm，正反面加工码转换终止!", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                         else
-                                            MessageBox.Show("当前订单号为: " + panel.cabinet.OrderNo + "\n\n有问题的板号为: " + panel.ID + "\n\n槽宽为: " + panel.Machininglist[i].Width
+                                            MessageBox.Show("当前订单号为: " + panel.cabinet.OrderNo + "\n\n有问题的板号为: " + panel.ID + "\n\n有问题的板件名称为: " + panel.Name + "\n\n有问题的板件长宽为: " + panel.Length + " X " + panel.Width + "\n\n槽宽为: " + panel.Machininglist[i].Width
                                                 + "\n\n请注意,此槽宽并非班尔奇所规定的6mm槽或9mm槽的范围之内，正反面加工码转换终止!", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                                         return;
@@ -2032,25 +2032,25 @@ namespace _3VJ_MV
 
                                     if (Math.Abs(double.Parse(panel.Machininglist[i].Width) - 9) < 0.01) //20190102对厨柜的槽宽做了限制。如果不满足要求就报错.这里的逻辑重新写了一下
                                     {
-                                        routesetmillseq.RouteDiameter = "8.5";
-                                        routesetmillseq.RouteToolName = "129";
+                                        routeseq.RouteDiameter = "8.5";
+                                        routeseq.RouteToolName = "129";
                                     }
                                     else
                                     {
                                         if (Math.Abs(double.Parse(panel.Machininglist[i].Width) - 6) < 0.01)
                                         {
-                                            routesetmillseq.RouteDiameter = "6.35";
-                                            routesetmillseq.RouteToolName = "131";
+                                            routeseq.RouteDiameter = "6.35";
+                                            routeseq.RouteToolName = "131";
                                         }
                                         else
                                         {
                                             HaveLarger = true;
 
                                             if (panel.cabinet.OrderNo.Contains("CG"))
-                                                MessageBox.Show("当前橱柜订单号为: " + panel.cabinet.OrderNo + "\n\n有问题的板号为: " + panel.ID + "\n\n槽宽为: " + panel.Machininglist[i].Width
+                                                MessageBox.Show("当前橱柜订单号为: " + panel.cabinet.OrderNo + "\n\n有问题的板号为: " + panel.ID + "\n\n有问题的板件名称为: " + panel.Name + "\n\n有问题的板件长宽为: " + panel.Length + " X " + panel.Width + "\n\n槽宽为: " + panel.Machininglist[i].Width
                                                     + "\n\n请注意,橱柜的槽宽必须为 6mm，正反面加工码转换终止!", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                             else
-                                                MessageBox.Show("当前订单号为: " + panel.cabinet.OrderNo + "\n\n有问题的板号为: " + panel.ID + "\n\n槽宽为: " + panel.Machininglist[i].Width
+                                                MessageBox.Show("当前订单号为: " + panel.cabinet.OrderNo + "\n\n有问题的板号为: " + panel.ID + "\n\n有问题的板件名称为: " + panel.Name + "\n\n有问题的板件长宽为: " + panel.Length + " X " + panel.Width + "\n\n槽宽为: " + panel.Machininglist[i].Width
                                                     + "\n\n请注意,此槽宽并非班尔奇所规定的6mm槽或9mm槽的范围之内，正反面加工码转换终止!", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                                             return;

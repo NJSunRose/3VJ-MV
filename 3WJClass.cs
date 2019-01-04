@@ -288,7 +288,7 @@ namespace _3VJ_MV
 
                                 }
 
-                                foreach (XmlNode xnmental in xnl.ChildNodes[Grpup_down_xnpanelnum].ChildNodes)
+                                foreach (XmlNode xnmental in Group_down_xnl.ChildNodes[Grpup_down_xnpanelnum].ChildNodes)//20190104
                                 {
                                     if (xnmental.Name == "Metal")
                                     {
